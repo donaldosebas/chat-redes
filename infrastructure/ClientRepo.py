@@ -37,5 +37,6 @@ class Client(slixmpp.ClientXMPP):
         self.send_message(mto=message_info['to_who'],
                           mbody=message_info['message'],
                           mtype='chat')
+        self.process()
 # https://slixmpp.readthedocs.io/en/latest/using_asyncio.html?highlight=loop.run_forever()#running-the-event-loop
 # https://stackoverflow.com/questions/56320676/xmpp-threaded-receiver-in-python-3
