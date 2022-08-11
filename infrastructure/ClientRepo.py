@@ -1,13 +1,15 @@
 import slixmpp
-
+import xmpp
 from persistance.AuthRepo import Auth
 from persistance.CommunicationRepo import Communication
+from persistance.HelpersRepo import Helper
 
 
 class Client(slixmpp.ClientXMPP):
     def __init__(self):
         self.authRepo = Auth()
         self.communicationRepo = Communication()
+        self.helperRepo = Helper()
 
     def login(self):
         credentials = self.authRepo.login()
@@ -21,11 +23,41 @@ class Client(slixmpp.ClientXMPP):
         self.add_event_handler('message', self.message)
 
         self.connect(disable_starttls=True)
+        self.process(forever=False)
+    
+    def register(self):
+        credentials = self.authRepo.register()
+        jid = xmpp.JID(credentials['username'])
+        client = xmpp.Client(jid.getDomain(), debug=[])
+        client.connect()
+        return xmpp.features.register(client, jid.getDomain(), {
+            'username': jid.getNode(),
+            'password': credentials['password']
+        })
 
 
     async def start(self, event):
         self.send_presence()
         await self.get_roster()
+        print("Conectado exitosamente")
+        login_start = True
+        while login_start:
+            self.helperRepo.get_login_options()
+            opcion_submenu = int(input("Which option you want to take? "))
+
+            if opcion_submenu == 1:
+                self.send_one_to_one_message()
+                await self.get_roster()
+            elif opcion_submenu == 2:
+                self.disconnect()
+                login_start = False
+            elif opcion_submenu == 3:
+                
+                self.disconnect()
+                login_start = False
+            else:
+                print("Please select an option from the given menu")
+
 
     def message(self, msg):
         if msg['type'] in ('normal', 'chat'):
@@ -37,6 +69,8 @@ class Client(slixmpp.ClientXMPP):
         self.send_message(mto=message_info['to_who'],
                           mbody=message_info['message'],
                           mtype='chat')
-        self.process()
+
+        
+
 # https://slixmpp.readthedocs.io/en/latest/using_asyncio.html?highlight=loop.run_forever()#running-the-event-loop
 # https://stackoverflow.com/questions/56320676/xmpp-threaded-receiver-in-python-3

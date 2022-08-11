@@ -12,8 +12,18 @@ class Auth:
             'password': password,
         }
 
-    def register(self, username, password):
-        print('register')
+    def register(self):
+        print('Enter username: ')
+        username = input()
+        print('Enter password: ')
+        password = input()
+        self.username = username
+        self.password = password
+
+        return {
+            'username': username,
+            'password': password,
+        }
     
     def logout(self):
         print('logout')
