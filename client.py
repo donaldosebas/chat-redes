@@ -56,6 +56,7 @@ if __name__ == '__main__':
 
         if (option == '2'):
             Client.register()
+            print('Successfully registered')
 
         if (option == '3'):
             print('Thanks for using chatApp')

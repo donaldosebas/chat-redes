@@ -5,6 +5,7 @@ from persistance.AuthRepo import Auth
 from persistance.CommunicationRepo import Communication
 from persistance.HelpersRepo import Helper
 from slixmpp.xmlstream.stanzabase import ET
+from aioconsole import ainput, aprint
 
 
 class Client(slixmpp.ClientXMPP):
@@ -22,8 +23,9 @@ class Client(slixmpp.ClientXMPP):
         self.register_plugin('xep_0199') # XMPP Ping
         self.register_plugin('xep_0077')
 
-        self.add_event_handler("session_start", self.start)
+
         self.add_event_handler('message', self.message)
+        self.add_event_handler("session_start", self.start)
 
         self.connect(disable_starttls=True)
         self.process(forever=False)
@@ -48,18 +50,18 @@ class Client(slixmpp.ClientXMPP):
             await query.send()
             self.disconnect()
         except:
-            print('There has been an issue')
+            await aprint('There has been an issue')
             self.disconnect()
             
 
     async def start(self, event):
         self.send_presence()
         await self.get_roster()
-        print("Conectado exitosamente")
+        await aprint("Conectado exitosamente")
         login_start = True
         while login_start:
             self.helperRepo.get_login_options()
-            opcion_submenu = int(input("Which option you want to take? "))
+            opcion_submenu = await int(ainput("Which option you want to take? "))
 
             if opcion_submenu == 1:
                 self.send_one_to_one_message()
@@ -72,12 +74,12 @@ class Client(slixmpp.ClientXMPP):
                 await self.get_roster()
                 login_start = False
             else:
-                print("Please select an option from the given menu")
+                await aprint("Please select an option from the given menu")
 
 
-    def message(self, msg):
+    async def message(self, msg):
         if msg['type'] in ('normal', 'chat'):
-            print(msg['body'])
+            await aprint(msg['body'])
 
     def send_one_to_one_message(self):
         message_info = self.communicationRepo.message_one_to_one()

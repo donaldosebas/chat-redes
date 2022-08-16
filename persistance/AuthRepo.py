@@ -1,9 +1,12 @@
+from aioconsole import ainput, aprint
+import asyncio
+
 class Auth:
-    def login(self):
-        print('Enter username: ')
-        username = input()
-        print('Enter password: ')
-        password = input()
+    async def login(self):
+        await aprint('Enter username: ')
+        username = await ainput()
+        await aprint('Enter password: ')
+        password = await ainput()
         self.username = username
         self.password = password
 
@@ -12,11 +15,11 @@ class Auth:
             'password': password,
         }
 
-    def register(self):
-        print('Enter username: ')
-        username = input()
-        print('Enter password: ')
-        password = input()
+    async def register(self):
+        await aprint('Enter username: ')
+        username = await ainput()
+        await aprint('Enter password: ')
+        password = await ainput()
         self.username = username
         self.password = password
 

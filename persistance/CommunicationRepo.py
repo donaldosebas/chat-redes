@@ -1,9 +1,12 @@
+from aioconsole import ainput, aprint
+import asyncio
+
 class Communication:
-    def message_one_to_one(self):
-        print('To who? ')
-        to = input()
-        print('Enter message: ')
-        message = input()
+    async def message_one_to_one(self):
+        await aprint('To who? ')
+        to = await ainput()
+        await aprint('Enter message: ')
+        message = await ainput()
         self.to = to
         self.message = message
 
