@@ -1,8 +1,10 @@
+from urllib import response
 import slixmpp
 import xmpp
 from persistance.AuthRepo import Auth
 from persistance.CommunicationRepo import Communication
 from persistance.HelpersRepo import Helper
+from slixmpp.xmlstream.stanzabase import ET
 
 
 class Client(slixmpp.ClientXMPP):
@@ -18,6 +20,7 @@ class Client(slixmpp.ClientXMPP):
         self.register_plugin('xep_0004') # Data Forms
         self.register_plugin('xep_0060') # PubSub
         self.register_plugin('xep_0199') # XMPP Ping
+        self.register_plugin('xep_0077')
 
         self.add_event_handler("session_start", self.start)
         self.add_event_handler('message', self.message)
@@ -34,7 +37,20 @@ class Client(slixmpp.ClientXMPP):
             'username': jid.getNode(),
             'password': credentials['password']
         })
+    
+    async def unregister(self):
+        query = self.Iq()
+        query['type'] = 'set'
+        query['from'] = self.boundjid.user
+        query['register']['remove'] = True
 
+        try:
+            await query.send()
+            self.disconnect()
+        except:
+            print('There has been an issue')
+            self.disconnect()
+            
 
     async def start(self, event):
         self.send_presence()
@@ -52,8 +68,8 @@ class Client(slixmpp.ClientXMPP):
                 self.disconnect()
                 login_start = False
             elif opcion_submenu == 3:
-                
-                self.disconnect()
+                await self.unregister()
+                await self.get_roster()
                 login_start = False
             else:
                 print("Please select an option from the given menu")
@@ -61,8 +77,7 @@ class Client(slixmpp.ClientXMPP):
 
     def message(self, msg):
         if msg['type'] in ('normal', 'chat'):
-            self.send_message(mto=msg['from'],
-            mbody='Thanks for sending:\n%s' % msg['body'])
+            print(msg['body'])
 
     def send_one_to_one_message(self):
         message_info = self.communicationRepo.message_one_to_one()
