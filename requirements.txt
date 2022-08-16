@@ -1,0 +1,16 @@
+aioconsole==0.5.0
+aiodns==3.0.0
+asyncio==3.4.3
+cffi==1.15.1
+pyasn1==0.4.8
+pyasn1-modules==0.2.8
+pycares==4.2.1
+pycparser==2.21
+pynput==1.7.6
+pyobjc-core==8.5
+pyobjc-framework-ApplicationServices==8.5
+pyobjc-framework-Cocoa==8.5
+pyobjc-framework-Quartz==8.5
+six==1.16.0
+slixmpp==1.8.2
+xmpppy==0.7.1
