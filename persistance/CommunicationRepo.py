@@ -17,6 +17,18 @@ class Communication:
                 'user': user,
                 'message': message,
             }]
+    def receive_message_group(self, room, user, message):
+        try:
+            self.messages[room].append({
+                'user': user,
+                'message': message,
+            })
+
+        except:
+            self.messages[room] = [{
+                'user': user,
+                'message': message,
+            }]
     def send_message(self, user_to, message):
         try:
             self.messages[user_to].append({

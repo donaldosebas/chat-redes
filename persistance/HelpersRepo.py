@@ -19,6 +19,7 @@ class Helper:
             5. Get contacts
             6. Set Presence
             7. Get user info
+            8. Group chat
         """)
     async def get_presence_options(self):
         await aprint("""

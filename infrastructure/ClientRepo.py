@@ -23,9 +23,16 @@ class Client(slixmpp.ClientXMPP):
         self.register_plugin('xep_0060') # PubSub
         self.register_plugin('xep_0199') # XMPP Ping
         self.register_plugin('xep_0077') # Unregister account
+        self.register_plugin('xep_0045') # Group chat
+        self.register_plugin('xep_0085')  # Chat State Notifications
 
-
-        self.add_event_handler('message', self.message)
+        self.add_event_handler('chatstate_gone', self.contactGone)
+        self.add_event_handler('chatstate_active', self.contactActive)
+        self.add_event_handler('chatstate_inactive', self.contactInactive)
+        self.add_event_handler('chatstate_paused', self.contactPause)
+        self.add_event_handler('chatstate_composing', self.contactTyping)
+        self.add_event_handler("message", self.message)
+        self.add_event_handler('groupchat_message', self.message_group)
         self.add_event_handler("session_start", self.start)
 
         self.connect(disable_starttls=True)
@@ -63,7 +70,6 @@ class Client(slixmpp.ClientXMPP):
         while login_start:
             await self.helperRepo.get_login_options()
             opcion_submenu = await ainput("Which option you want to take? ")
-
             if opcion_submenu == '1':
                 await aprint("For exiting do exit()")
                 message_info = await self.communicationRepo.message_one_to_one_whom()
@@ -78,6 +84,7 @@ class Client(slixmpp.ClientXMPP):
                 while option != exit:
                     option = await self.send_one_to_one_message(message_info)
                     await self.get_roster()
+                self.recibir_de = ''
             elif opcion_submenu == '2':
                 self.disconnect()
                 login_start = False
@@ -98,6 +105,24 @@ class Client(slixmpp.ClientXMPP):
             elif opcion_submenu == '7':
                 user = await self.authRepo.get_user_info()
                 await self.get_user(user['user'])
+            elif opcion_submenu == '8':
+                await aprint("For exiting do exit()")
+                room = await self.join_group()
+                self.recibir_de=room
+                await self.get_roster()
+                await aprint(f'Group chat ---------- {room}')
+                if room in self.communicationRepo.messages:
+                    for i in self.communicationRepo.messages[room]:
+                        if i['user'] == 'me':
+                            await aprint('>>', i['message'])
+                        else:
+                            await aprint(i['user'], '>>', i['message'])
+                option = 'init'
+                while option != exit:
+                    option = await self.send_group_message(room)
+                    await self.get_roster()
+                self.recibir_de = ''
+
             else:
                 await aprint("Please select an option from the given menu")
 
@@ -108,8 +133,18 @@ class Client(slixmpp.ClientXMPP):
             if message_from == self.recibir_de:
                 await aprint('\n',message_from, '>>', msg['body'])
             else:
-                await aprint('\n', 'Notification...', message_from)
+                await aprint('\n', '[NOTIFICACION]', message_from)
             self.communicationRepo.receive_message(message_from, msg['body'])
+
+
+    async def message_group(self, msg):
+        if msg['type'] in ('groupchat') and msg['body'] != 'message':
+            message_from = str(msg['from']).split('/')
+            if message_from[0] == self.recibir_de:
+                await aprint('\n',message_from[1], '>>', msg['body'])
+            else:
+                await aprint('\n', '[NOTIFICACION]', 'Grupo: ', message_from[0], ' De: ', message_from[1])
+            self.communicationRepo.receive_message_group(message_from[0], message_from[1], msg['body'])
 
     async def send_one_to_one_message(self, message_info):
         message = await self.communicationRepo.message_one_to_one_message()
@@ -172,4 +207,43 @@ class Client(slixmpp.ClientXMPP):
             """)
         except:
             await aprint(f'{contact} is Offline')
+
+
+    async def join_group(self):
+        room = await ainput("Write the group name: ")
+        nickname = await ainput("write your nickname: ")
+        self.plugin['xep_0045'].join_muc(room+"@conference.alumchat.fun", nickname)
+        return room+"@conference.alumchat.fun"
+    
+    async def send_group_message(self, room):
+        message = await self.communicationRepo.message_one_to_one_message()
+        if message['message'] == exit:
+            return exit
+        self.send_message(mto=room, mbody=message, mtype='groupchat')
+        self.communicationRepo.send_message(room, message['message'])
+
+    async def contactGone(self, event):
+        msg_from = str(event['from'])
+        if (self.recibir_de in msg_from):
+            await aprint(f'[NOTIFICACION] {msg_from} y se marchó... y a su barco le llamó libertad...')
+
+    async def contactInactive(self, event):
+        msg_from = str(event['from'])
+        if (self.recibir_de in msg_from):
+            await aprint(f'[NOTIFICACION] {msg_from} is inactive')
+
+    async def contactActive(self, event):
+        msg_from = str(event['from'])
+        if (self.recibir_de in msg_from):
+            await aprint(f'[NOTIFICACION] {msg_from} is active')
+
+    async def contactPause(self, event):
+        msg_from = str(event['from'])
+        if (self.recibir_de in msg_from):
+            await aprint(f'[NOTIFICACION] {msg_from} stopped writing...')
+
+    async def contactTyping(self, event):
+        msg_from = str(event['from'])
+        if (self.recibir_de in msg_from):
+            await aprint(f'[NOTIFICACION] {msg_from} is writing...')
 
