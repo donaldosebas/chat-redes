@@ -5,6 +5,7 @@ Este chat consiste en una conexión por xmpp que nos permite interactuar con ses
 **[Installation](#Installation)**<br>
 **[Usage](#Usage)**<br>
 **[Tecnologies](#Tecnologies)**<br>
+**[Functionalities](#Functionalities)**<br>
 **[Contributing](#Contributing)**<br>
 
 ## Installation
@@ -28,6 +29,22 @@ Tecnologies    | Description
 ✅ Ayncio    	| asyncio is a library to write concurrent code using the async/await syntax.
 ✅ Aioconsole	    	| Asynchronous console and interfaces for asyncio.
 ✅ Slixmpp     	| Slixmpp is an MIT licensed XMPP library for Python 3.7+
+
+## Functionalities
+Administración de cuenta (25% del funcionamiento) 
+  [X] Registrar una nueva cuenta en el servidor 
+  [X] Iniciar sesión con una cuenta 
+  [X] Cerrar sesión con una cuenta 
+  [X] Eliminar la cuenta del servidor 
+Comunicación (75% del funcionamiento) 
+  [X] Mostrar todos los usuarios/contactos y su estado 
+  [X] Agregar un usuario a los contactos 
+  [X] Mostrar detalles de contacto de un usuario 
+  [X] Comunicación 1 a 1 con cualquier usuario/contacto 
+  [] Participar en conversaciones grupales 
+  [X] Definir mensaje de presencia 
+  [X] Enviar/recibir notificaciones 
+  [X] Enviar/recibir archivos 
 
 ## Contributing
 <a href="https://github.com/donaldosebas"><img src="https://avatars.githubusercontent.com/u/54748964?v=4" height="200"></a>
