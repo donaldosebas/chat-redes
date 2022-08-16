@@ -1,3 +1,6 @@
+from aioconsole import ainput, aprint
+import asyncio
+
 class Auth:
     def login(self):
         print('Enter username: ')
@@ -30,3 +33,12 @@ class Auth:
     
     def delete_account(self):
         print('delete account')
+    
+    async def add_new_contact(self):
+        await aprint('Enter contact to add: ')
+        contact = await ainput()
+        self.contact = contact
+
+        return {
+            'contact': contact,
+        }

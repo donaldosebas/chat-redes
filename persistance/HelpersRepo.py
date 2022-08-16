@@ -15,5 +15,6 @@ class Helper:
             1. Send one to one message
             2. Logout
             3. Delete account from server 
+            4. Add contact
         """)
     

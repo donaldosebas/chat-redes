@@ -79,6 +79,10 @@ class Client(slixmpp.ClientXMPP):
                 await self.unregister()
                 await self.get_roster()
                 login_start = False
+            elif opcion_submenu == '4':
+                contact = await self.authRepo.add_new_contact()
+                await self.addContact(contact['contact'])
+                await self.get_roster()
             else:
                 await aprint("Please select an option from the given menu")
 
@@ -95,6 +99,10 @@ class Client(slixmpp.ClientXMPP):
         self.send_message(mto=message_info['to_who'],
                           mbody=message['message'],
                           mtype='chat')
+
+    async def addContact(self, newContact):
+        self.send_presence_subscription(newContact)
+        await aprint(newContact, 'Was added successfully to contacts')
 
         
 
