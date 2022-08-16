@@ -1,12 +1,13 @@
 from aioconsole import ainput, aprint
 import asyncio
+from getpass import getpass
 
 class Auth:
     def login(self):
         print('Enter username: ')
         username = input()
         print('Enter password: ')
-        password = input()
+        password = getpass("Password: ")
         self.username = username
         self.password = password
 
@@ -19,7 +20,7 @@ class Auth:
         print('Enter username: ')
         username = input()
         print('Enter password: ')
-        password = input()
+        password = getpass("Password: ")
         self.username = username
         self.password = password
 
