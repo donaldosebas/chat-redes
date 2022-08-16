@@ -41,7 +41,7 @@ Tecnologies    | Description
 - [X] Agregar un usuario a los contactos 
 - [X] Mostrar detalles de contacto de un usuario 
 - [X] Comunicación 1 a 1 con cualquier usuario/contacto 
-- [] Participar en conversaciones grupales 
+- [X] Participar en conversaciones grupales 
 - [X] Definir mensaje de presencia 
 - [X] Enviar/recibir notificaciones 
 - [X] Enviar/recibir archivos 
