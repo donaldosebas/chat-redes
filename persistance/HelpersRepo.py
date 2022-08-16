@@ -17,6 +17,8 @@ class Helper:
             3. Delete account from server 
             4. Add contact
             5. Get contacts
+            6. Set Presence
+            7. Get user info
         """)
     async def get_presence_options(self):
         await aprint("""

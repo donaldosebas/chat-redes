@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import logging
-import asyncio
-from getpass import getpass
 from argparse import ArgumentParser
 from infrastructure.ClientRepo import Client
 
@@ -17,7 +15,7 @@ Administración de cuenta (25% del funcionamiento)
 Comunicación (75% del funcionamiento) 
     X  Mostrar todos los usuarios/contactos y su estado 
     X Agregar un usuario a los contactos 
-    - Mostrar detalles de contacto de un usuario 
+    X Mostrar detalles de contacto de un usuario 
     X Comunicación 1 a 1 con cualquier usuario/contacto 
     - Participar en conversaciones grupales 
     X Definir mensaje de presencia 
@@ -50,6 +48,7 @@ if __name__ == '__main__':
     while (option != '6'):
         helpers.get_menu_options()
         option = input()
+        
 
         if (option == '1'):
             Client.login()

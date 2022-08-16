@@ -35,6 +35,15 @@ class Auth:
     def delete_account(self):
         print('delete account')
     
+    async def get_user_info(self):
+        await aprint('Enter user check: ')
+        user = await ainput()
+        self.user = user
+
+        return {
+            'user': user,
+        }
+    
     async def add_new_contact(self):
         await aprint('Enter contact to add: ')
         contact = await ainput()
