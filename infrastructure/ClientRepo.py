@@ -7,7 +7,8 @@ from persistance.HelpersRepo import Helper
 from slixmpp.xmlstream.stanzabase import ET
 from aioconsole import ainput, aprint
 
-
+exit = 'exit()'
+recibir_de = ''
 class Client(slixmpp.ClientXMPP):
     def __init__(self):
         self.authRepo = Auth()
@@ -60,16 +61,21 @@ class Client(slixmpp.ClientXMPP):
         await aprint("Conectado exitosamente")
         login_start = True
         while login_start:
-            self.helperRepo.get_login_options()
-            opcion_submenu = await int(ainput("Which option you want to take? "))
+            await self.helperRepo.get_login_options()
+            opcion_submenu = await ainput("Which option you want to take? ")
 
-            if opcion_submenu == 1:
-                self.send_one_to_one_message()
-                await self.get_roster()
-            elif opcion_submenu == 2:
+            if opcion_submenu == '1':
+                await aprint("For exiting do exit()")
+                message_info = await self.communicationRepo.message_one_to_one_whom()
+                recibir_de=message_info['to_who']
+                option = 'init'
+                while option != exit:
+                    option = await self.send_one_to_one_message(message_info)
+                    await self.get_roster()
+            elif opcion_submenu == '2':
                 self.disconnect()
                 login_start = False
-            elif opcion_submenu == 3:
+            elif opcion_submenu == '3':
                 await self.unregister()
                 await self.get_roster()
                 login_start = False
@@ -79,12 +85,15 @@ class Client(slixmpp.ClientXMPP):
 
     async def message(self, msg):
         if msg['type'] in ('normal', 'chat'):
-            await aprint(msg['body'])
+            await aprint(recibir_de, 'RECIBIR AAAA')
+            await aprint('\n',msg['from'], '>>', msg['body'])
 
-    def send_one_to_one_message(self):
-        message_info = self.communicationRepo.message_one_to_one()
+    async def send_one_to_one_message(self, message_info):
+        message = await self.communicationRepo.message_one_to_one_message()
+        if message['message'] == exit:
+            return exit
         self.send_message(mto=message_info['to_who'],
-                          mbody=message_info['message'],
+                          mbody=message['message'],
                           mtype='chat')
 
         
