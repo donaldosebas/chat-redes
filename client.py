@@ -15,7 +15,7 @@ Administración de cuenta (25% del funcionamiento)
     X Cerrar sesión con una cuenta 
     X Eliminar la cuenta del servidor 
 Comunicación (75% del funcionamiento) 
-    -  Mostrar todos los usuarios/contactos y su estado 
+    X  Mostrar todos los usuarios/contactos y su estado 
     X Agregar un usuario a los contactos 
     - Mostrar detalles de contacto de un usuario 
     X Comunicación 1 a 1 con cualquier usuario/contacto 

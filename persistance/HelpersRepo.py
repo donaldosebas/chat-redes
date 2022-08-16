@@ -16,5 +16,6 @@ class Helper:
             2. Logout
             3. Delete account from server 
             4. Add contact
+            5. Get contacts
         """)
     

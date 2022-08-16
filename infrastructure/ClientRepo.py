@@ -83,6 +83,9 @@ class Client(slixmpp.ClientXMPP):
                 contact = await self.authRepo.add_new_contact()
                 await self.addContact(contact['contact'])
                 await self.get_roster()
+            elif opcion_submenu == '5':
+                await self.getContacts()
+                await self.get_roster()
             else:
                 await aprint("Please select an option from the given menu")
 
@@ -103,6 +106,32 @@ class Client(slixmpp.ClientXMPP):
     async def addContact(self, newContact):
         self.send_presence_subscription(newContact)
         await aprint(newContact, 'Was added successfully to contacts')
+
+    async def getContacts(self):
+        roster = self.client_roster.groups()
+        self.contacts = []
+
+        for group in roster:
+            for user in roster[group]:
+                self.client_roster[user]['subscription']
+                conexions = self.client_roster.presence(user)
+                if not conexions:
+                    status = 'offline'
+                else:
+                    for _, obj in conexions.items():
+                        if obj['status'] == '':
+                            status = 'online'
+                        else:
+                            status = obj['status']
+                
+                self.contacts.append([
+                user,
+                status
+                ])
+                status = ''
+        await aprint('User->Status')
+        for contact in self.contacts:
+            await aprint(f'{contact[0]}->{contact[1]}')
 
         
 
