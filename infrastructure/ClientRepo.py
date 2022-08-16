@@ -22,7 +22,7 @@ class Client(slixmpp.ClientXMPP):
         self.register_plugin('xep_0004') # Data Forms
         self.register_plugin('xep_0060') # PubSub
         self.register_plugin('xep_0199') # XMPP Ping
-        self.register_plugin('xep_0077')
+        self.register_plugin('xep_0077') # Unregister account
 
 
         self.add_event_handler('message', self.message)
@@ -162,7 +162,3 @@ class Client(slixmpp.ClientXMPP):
         except:
             await aprint(f'{contact} is Offline')
 
-        
-
-# https://slixmpp.readthedocs.io/en/latest/using_asyncio.html?highlight=loop.run_forever()#running-the-event-loop
-# https://stackoverflow.com/questions/56320676/xmpp-threaded-receiver-in-python-3
