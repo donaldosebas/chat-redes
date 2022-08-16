@@ -68,6 +68,12 @@ class Client(slixmpp.ClientXMPP):
                 await aprint("For exiting do exit()")
                 message_info = await self.communicationRepo.message_one_to_one_whom()
                 self.recibir_de=message_info['to_who']
+                if message_info['to_who'] in self.communicationRepo.messages:
+                    for i in self.communicationRepo.messages[message_info['to_who']]:
+                        if i['user'] == 'me':
+                            await aprint('>>', i['message'])
+                        else:
+                            await aprint(i['user'], '>>', i['message'])
                 option = 'init'
                 while option != exit:
                     option = await self.send_one_to_one_message(message_info)
@@ -98,8 +104,12 @@ class Client(slixmpp.ClientXMPP):
 
     async def message(self, msg):
         if msg['type'] in ('normal', 'chat'):
-            await aprint(self.recibir_de, 'RECIBIR AAAA')
-            await aprint('\n',msg['from'], '>>', msg['body'])
+            message_from = str(msg['from']).split('/')[0]
+            if message_from == self.recibir_de:
+                await aprint('\n',message_from, '>>', msg['body'])
+            else:
+                await aprint('\n', 'Notification...', message_from)
+            self.communicationRepo.receive_message(message_from, msg['body'])
 
     async def send_one_to_one_message(self, message_info):
         message = await self.communicationRepo.message_one_to_one_message()
@@ -108,6 +118,7 @@ class Client(slixmpp.ClientXMPP):
         self.send_message(mto=message_info['to_who'],
                           mbody=message['message'],
                           mtype='chat')
+        self.communicationRepo.send_message(message_info['to_who'], message['message'])
 
     async def addContact(self, newContact):
         self.send_presence_subscription(newContact)

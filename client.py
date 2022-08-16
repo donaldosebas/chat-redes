@@ -19,7 +19,7 @@ Comunicación (75% del funcionamiento)
     X Comunicación 1 a 1 con cualquier usuario/contacto 
     - Participar en conversaciones grupales 
     X Definir mensaje de presencia 
-    - Enviar/recibir notificaciones 
+    X Enviar/recibir notificaciones 
     - Enviar/recibir archivos 
 """
 
