@@ -20,7 +20,7 @@ Comunicación (75% del funcionamiento)
     - Participar en conversaciones grupales 
     X Definir mensaje de presencia 
     X Enviar/recibir notificaciones 
-    - Enviar/recibir archivos 
+    X Enviar/recibir archivos 
 """
 
 
