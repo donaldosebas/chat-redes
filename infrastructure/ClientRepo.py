@@ -8,12 +8,12 @@ from slixmpp.xmlstream.stanzabase import ET
 from aioconsole import ainput, aprint
 
 exit = 'exit()'
-recibir_de = ''
 class Client(slixmpp.ClientXMPP):
     def __init__(self):
         self.authRepo = Auth()
         self.communicationRepo = Communication()
         self.helperRepo = Helper()
+        self.recibir_de = ''
 
     def login(self):
         credentials = self.authRepo.login()
@@ -67,7 +67,7 @@ class Client(slixmpp.ClientXMPP):
             if opcion_submenu == '1':
                 await aprint("For exiting do exit()")
                 message_info = await self.communicationRepo.message_one_to_one_whom()
-                recibir_de=message_info['to_who']
+                self.recibir_de=message_info['to_who']
                 option = 'init'
                 while option != exit:
                     option = await self.send_one_to_one_message(message_info)
@@ -86,13 +86,16 @@ class Client(slixmpp.ClientXMPP):
             elif opcion_submenu == '5':
                 await self.getContacts()
                 await self.get_roster()
+            elif opcion_submenu == '6':
+                await self.setPresence()
+                await self.get_roster()
             else:
                 await aprint("Please select an option from the given menu")
 
 
     async def message(self, msg):
         if msg['type'] in ('normal', 'chat'):
-            await aprint(recibir_de, 'RECIBIR AAAA')
+            await aprint(self.recibir_de, 'RECIBIR AAAA')
             await aprint('\n',msg['from'], '>>', msg['body'])
 
     async def send_one_to_one_message(self, message_info):
@@ -132,6 +135,15 @@ class Client(slixmpp.ClientXMPP):
         await aprint('User->Status')
         for contact in self.contacts:
             await aprint(f'{contact[0]}->{contact[1]}')
+
+    async def setPresence(self):
+        options = ['chat', 'away', 'xa', 'dnd']
+        await self.helperRepo.get_presence_options()
+        option = await ainput('==> ')
+        presence_value = options[int(option) - 1]
+        status = await ainput('Enter status: ')
+        self.send_presence(pshow=presence_value, pstatus=status)
+        await self.get_roster()
 
         
 

@@ -18,4 +18,13 @@ class Helper:
             4. Add contact
             5. Get contacts
         """)
+    async def get_presence_options(self):
+        await aprint("""
+            Presence options
+
+            1. Available
+            2. Away
+            3. Not Available
+            4. Bussy
+        """)
     
