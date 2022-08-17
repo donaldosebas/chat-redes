@@ -18,9 +18,7 @@ Este chat consiste en una conexión por xmpp que nos permite interactuar con ses
 ## Usage
 ### `python client.py`
 
-Builds the app in order to create the ./dist directory where <br/>
-there's a index.html with a client.js that webpack generates <br/>
-in order to have the server side rendering. <br/>
+Runs project
 
 ## Tecnologies 
 Tecnologies    | Description
