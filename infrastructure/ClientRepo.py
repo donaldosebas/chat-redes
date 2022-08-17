@@ -219,7 +219,7 @@ class Client(slixmpp.ClientXMPP):
         message = await self.communicationRepo.message_one_to_one_message()
         if message['message'] == exit:
             return exit
-        self.send_message(mto=room, mbody=message, mtype='groupchat')
+        self.send_message(mto=room, mbody=message['message'], mtype='groupchat')
         self.communicationRepo.send_message(room, message['message'])
 
     async def contactGone(self, event):
